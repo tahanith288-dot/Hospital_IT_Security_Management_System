@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hospital IT Security Management</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <div>
+    <h1>Hospital IT Security Management</h1>
+    <p>IT Asset, Endpoint Security & Support Dashboard</p>
+  </div>
+  <a class="button" href="/export">Export CSV</a>
+</header>
+
+<main>
+<section class="cards">
+  <div class="card"><span>Total Devices</span><strong>{{ stats.devices }}</strong></div>
+  <div class="card"><span>Protected</span><strong>{{ stats.protected }}</strong></div>
+  <div class="card warning"><span>Needs Attention</span><strong>{{ stats.attention }}</strong></div>
+  <div class="card"><span>Open Tickets</span><strong>{{ stats.open_tickets }}</strong></div>
+</section>
+
+<section class="panel">
+<h2>Add IT Device</h2>
+<form method="post" action="/add-device" class="grid">
+  <input name="asset_name" placeholder="Asset name" required>
+  <input name="department" placeholder="Department" required>
+  <select name="device_type"><option>Workstation</option><option>Printer</option><option>Server</option></select>
+  <input name="os" placeholder="Operating system">
+  <select name="security_status"><option>Protected</option><option>Needs Update</option><option>At Risk</option></select>
+  <select name="status"><option>Active</option><option>Maintenance</option><option>Inactive</option></select>
+  <button>Add Device</button>
+</form>
+</section>
+
+<section class="panel">
+<h2>Device Security Status</h2>
+<table>
+<thead><tr><th>Asset</th><th>Department</th><th>Type</th><th>OS</th><th>Security</th><th>Status</th></tr></thead>
+<tbody>
+{% for d in devices %}
+<tr>
+<td>{{ d.asset_name }}</td><td>{{ d.department }}</td><td>{{ d.device_type }}</td>
+<td>{{ d.os }}</td>
+<td><span class="badge {{ d.security_status|lower|replace(' ','-') }}">{{ d.security_status }}</span></td>
+<td>{{ d.status }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</section>
+
+<section class="panel">
+<h2>IT Support Tickets</h2>
+<form method="post" action="/add-ticket" class="grid">
+  <input name="title" placeholder="Issue title" required>
+  <input name="department" placeholder="Department" required>
+  <select name="priority"><option>Low</option><option>Medium</option><option>High</option></select>
+  <select name="status"><option>Open</option><option>In Progress</option><option>Closed</option></select>
+  <button>Add Ticket</button>
+</form>
+<table>
+<thead><tr><th>Issue</th><th>Department</th><th>Priority</th><th>Status</th></tr></thead>
+<tbody>
+{% for t in tickets %}
+<tr><td>{{ t.title }}</td><td>{{ t.department }}</td><td>{{ t.priority }}</td><td>{{ t.status }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</section>
+</main>
+</body>
+</html>
