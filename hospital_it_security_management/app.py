@@ -49,7 +49,7 @@ def init_db():
             (title,department,priority,status) VALUES (?,?,?,?)""", tickets)
     conn.commit()
     conn.close()
-
+init_db()
 @app.route("/")
 def dashboard():
     conn = get_db()
